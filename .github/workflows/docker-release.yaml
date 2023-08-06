@@ -8,7 +8,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: pulumi-actions
+  IMAGE_NAME: ghcr.io/lowkey-who/pulumi-actions
 
 jobs:
 
