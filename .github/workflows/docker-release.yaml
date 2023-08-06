@@ -1,0 +1,74 @@
+name: Docker Image CI
+
+on:
+  release:
+    types: [ "released" ]
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: pulumi-actions
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    -
+      name: Checkout
+      uses: actions/checkout@v3
+
+    - 
+      name: Set up QEMU
+      uses: docker/setup-qemu-action@v2
+      with:
+        platforms: all
+  
+    - 
+      name: Set up Docker Buildx
+      id: buildx
+      uses: docker/setup-buildx-action@v2
+      with:
+        version: latest
+   
+    - 
+      name: Available platforms
+      run: echo ${{ steps.buildx.outputs.platforms }} && docker version
+    
+    - 
+      name: Login to GitHub Container Registry
+      uses: docker/login-action@v2
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+    
+    - 
+      name: Build and push image
+      run: |
+        echo "GithubRef: ${GITHUB_REF}"
+        VERSION=${GITHUB_REF##*/}
+        echo "VERSION: ${VERSION}"
+        IMAGE_VERSION=${VERSION:1}
+        echo "IMAGE_VERSION: ${IMAGE_VERSION}"
+
+        PLATFORMS="linux/amd64,linux/ppc64le,linux/arm64"
+        echo "Building and pushing version ${IMAGE_VERSION} of image ${IMAGE_NAME}"
+
+        docker buildx build \
+            --label "org.opencontainers.image.created=$(date --rfc-3339=seconds)" \
+            --label "org.opencontainers.image.licenses=Apache" \
+            --label "org.opencontainers.image.revision=$(git rev-parse HEAD)" \
+            --label "org.opencontainers.image.source=https://github.com/lowkey-who/pulumi-actions" \
+            --label "org.opencontainers.image.title=pulumi-actions" \
+            --label "org.opencontainers.image.version=${IMAGE_VERSION}" \
+            --platform "${PLATFORMS}" \
+            --pull \
+            --push \
+            -f Dockerfile.node \
+            -t "${IMAGE_NAME}:${IMAGE_VERSION}" \
+            -t "${IMAGE_NAME}:latest" \
+            .
+    
+    
