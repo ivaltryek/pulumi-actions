@@ -73,3 +73,5 @@ pulumi-actions -s test6 --backend pulumicloud --path "/examples/ts" --runtime ty
 ```
 pulumi-actions -s test6 --backend pulumicloud --path "/examples/ts" --runtime typescript --pulumi-cloud-token "pul-xxxxxxxxxxxxx" --apply --install-deps --passphrase "abceDDddsfdsfsdfdsadasd"
 ```
+
+> For more examples check workflow [examples](https://github.com/lowkey-who/pulumi-actions/tree/main/.github/workflows)
