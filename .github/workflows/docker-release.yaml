@@ -55,7 +55,7 @@ jobs:
         IMAGE_VERSION=${VERSION:1}
         echo "IMAGE_VERSION: ${IMAGE_VERSION}"
 
-        PLATFORMS="linux/amd64,linux/ppc64le,linux/arm64"
+        PLATFORMS="linux/amd64,linux/arm64"
         echo "Building and pushing version ${IMAGE_VERSION} of image ${IMAGE_NAME}"
 
         docker buildx build \
