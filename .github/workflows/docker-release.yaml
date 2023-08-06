@@ -52,10 +52,10 @@ jobs:
         echo "GithubRef: ${GITHUB_REF}"
         VERSION=${GITHUB_REF##*/}
         echo "VERSION: ${VERSION}"
-        IMAGE_VERSION=${VERSION:1}
+        IMAGE_VERSION=v1.0
         echo "IMAGE_VERSION: ${IMAGE_VERSION}"
 
-        PLATFORMS="linux/amd64,linux/arm64"
+        PLATFORMS="linux/amd64"
         echo "Building and pushing version ${IMAGE_VERSION} of image ${IMAGE_NAME}"
 
         docker buildx build \
@@ -72,5 +72,18 @@ jobs:
             -t "${IMAGE_NAME}:${IMAGE_VERSION}" \
             -t "${IMAGE_NAME}:latest" \
             .
-    
+
+        cd github-action
+        docker buildx build \
+            --label "org.opencontainers.image.created=$(date --rfc-3339=seconds)" \
+            --label "org.opencontainers.image.licenses=Apache" \
+            --label "org.opencontainers.image.revision=$(git rev-parse HEAD)" \
+            --label "org.opencontainers.image.source=https://github.com/lowkey-who/pulumi-actions" \
+            --label "org.opencontainers.image.title=pulumi-actions" \
+            --label "org.opencontainers.image.version=${IMAGE_VERSION}" \
+            --platform "${PLATFORMS}" \
+            --pull \
+            --push \
+            -t "${IMAGE_NAME}:${IMAGE_VERSION}-github-action" \
+            .
     

@@ -1,0 +1,17 @@
+name: 'pulumi-actions - Atlantis like automation for Pulumi'
+description: 'init, preview and apply pulumi stacks'
+branding:
+  icon: command
+  color: gray-dark
+inputs:
+  cmd:
+    description: 'The Command which should be run'
+    required: true
+outputs:
+  result:
+    description: "The complete result from the pulumi-actions command being run"
+runs:
+  using: 'docker'
+  image: 'docker://mikefarah/yq:4-githubaction'
+  args:
+    - ${{ inputs.cmd }}
