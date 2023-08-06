@@ -8,6 +8,5 @@ LABEL maintainer="Meet Vasani <lowkey-who@users.noreply.github.com>"
 RUN apt-get update && apt-get install curl -y 
 COPY ./examples /examples
 RUN curl -fsSL https://get.pulumi.com | bash
-WORKDIR /app
-COPY --from=builder /app/target/release/pulumi-actions /app
-ENTRYPOINT ["./pulumi-actions"]
+COPY --from=builder /app/target/release/pulumi-actions /usr/bin/pulumi-actions
+ENTRYPOINT ["/usr/bin/pulumi-actions"]
