@@ -7,13 +7,14 @@ on:
 
 jobs:
   comment_job:
+    name: pulumi-actions
+    if: github.event.issue.pull_request != '' && contains(github.event.comment.body, 'pulumi-actions')   
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Get the comment payload
       - name: preview stack when comment on PR
         uses: lowkey-who/pulumi-actions@main
         env:
