@@ -2,7 +2,8 @@ name: Docker Image CI
 
 on:
   release:
-    types: [ "released" ]
+    types:
+      - created
   
   workflow_dispatch:
 
@@ -17,6 +18,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+
+    # Extract the tag name from GITHUB_REF
+    - 
+      name: Set environment vars
+      run: | 
+        echo "TAG_NAME=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+
     -
       name: Checkout
       uses: actions/checkout@v3
@@ -52,7 +60,7 @@ jobs:
         echo "GithubRef: ${GITHUB_REF}"
         VERSION=${GITHUB_REF##*/}
         echo "VERSION: ${VERSION}"
-        IMAGE_VERSION=${GITHUB_SHA}
+        IMAGE_VERSION=${{ env.TAG_NAME }}
         echo "IMAGE_VERSION: ${IMAGE_VERSION}"
 
         PLATFORMS="linux/amd64"
@@ -63,6 +71,7 @@ jobs:
             --label "org.opencontainers.image.licenses=Apache" \
             --label "org.opencontainers.image.revision=$(git rev-parse HEAD)" \
             --label "org.opencontainers.image.source=https://github.com/lowkey-who/pulumi-actions" \
+            --label "org.opencontainers.image.description=runs init, preview and apply on pulumi stacks right in your Github-Actions." \
             --label "org.opencontainers.image.title=pulumi-actions" \
             --label "org.opencontainers.image.version=${IMAGE_VERSION}" \
             --platform "${PLATFORMS}" \
@@ -79,6 +88,7 @@ jobs:
             --label "org.opencontainers.image.licenses=Apache" \
             --label "org.opencontainers.image.revision=$(git rev-parse HEAD)" \
             --label "org.opencontainers.image.source=https://github.com/lowkey-who/pulumi-actions" \
+            --label "org.opencontainers.image.description=runs init, preview and apply on pulumi stacks right in your Github-Actions." \
             --label "org.opencontainers.image.title=pulumi-actions" \
             --label "org.opencontainers.image.version=${IMAGE_VERSION}" \
             --platform "${PLATFORMS}" \
@@ -86,4 +96,3 @@ jobs:
             --push \
             -t "${IMAGE_NAME}:${IMAGE_VERSION}-github-action" \
             .
-    
