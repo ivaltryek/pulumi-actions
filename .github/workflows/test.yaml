@@ -16,4 +16,4 @@ jobs:
         pulumi_cloud_token: ${{ secrets.PuluToken }}
         passphrase: ${{ secrets.Passphrase }}
       with:
-        cmd: pulumi-actions --pulumi-cloud-token "$pulumi_cloud_token" -s test6 --backend pulumicloud --path "$GITHUB_WORKSPACE/examples/ts" --install-deps --preview --passphrase "$passphrase"
+        cmd: pulumi-actions --pulumi-cloud-token "$pulumi_cloud_token" -s test6 --backend pulumicloud --path "$GITHUB_WORKSPACE/examples/ts" --install-deps --preview --passphrase "$passphrase" --runtime typescript
