@@ -1,0 +1,23 @@
+name: Comment Workflow
+
+on:
+  issue_comment:
+    types:
+      - created
+
+jobs:
+  comment_job:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Get the comment payload
+      - name: preview stack when comment on PR
+        uses: lowkey-who/pulumi-actions@main
+        env:
+          pulumi_cloud_token: ${{ secrets.PuluToken }}
+          passphrase: ${{ secrets.Passphrase }}
+        with:
+          cmd: ${{ github.event.comment.body }}
