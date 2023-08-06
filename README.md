@@ -57,6 +57,10 @@ Options:
   with:
     cmd: pulumi-actions --pulumi-cloud-token "$pulumi_cloud_token" -s test6 --backend pulumicloud --path "$GITHUB_WORKSPACE/examples/ts" --install-deps --preview --passphrase "$passphrase" --runtime typescript
 ```
+- Make this action run on PR when comment is issued.
+  For this use-case check this workflow [example](https://github.com/lowkey-who/pulumi-actions/blob/main/.github/workflows/test-issue-comment.yaml)
+
+  TL;DR Just comment the command that you need to run and action will run whatever fed into the comment. So make sure to check the comment else workflow might not run.
 
 ### NOTE: Please test the following examples either in Github Actions or mount the dir when running the docker command.
 - Init the stack
@@ -74,4 +78,4 @@ pulumi-actions -s test6 --backend pulumicloud --path "/examples/ts" --runtime ty
 pulumi-actions -s test6 --backend pulumicloud --path "/examples/ts" --runtime typescript --pulumi-cloud-token "pul-xxxxxxxxxxxxx" --apply --install-deps --passphrase "abceDDddsfdsfsdfdsadasd"
 ```
 
-> For more examples check workflow [examples](https://github.com/lowkey-who/pulumi-actions/tree/main/.github/workflows)
+> workflow [examples](https://github.com/lowkey-who/pulumi-actions/tree/main/.github/workflows)
