@@ -52,7 +52,7 @@ jobs:
         echo "GithubRef: ${GITHUB_REF}"
         VERSION=${GITHUB_REF##*/}
         echo "VERSION: ${VERSION}"
-        IMAGE_VERSION=v1.0
+        IMAGE_VERSION=${GITHUB_SHA}
         echo "IMAGE_VERSION: ${IMAGE_VERSION}"
 
         PLATFORMS="linux/amd64"
