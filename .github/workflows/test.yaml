@@ -11,7 +11,7 @@ jobs:
       uses: actions/checkout@v3
     - 
       name: preview stack
-      uses: lowkey-who/pulumi-actions
+      uses: lowkey-who/pulumi-actions@main
       env:
         pulumi_cloud_token: ${{ secrets.PuluToken }}
         passphrase: ${{ secrets.Passphrase }}
