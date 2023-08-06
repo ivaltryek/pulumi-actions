@@ -12,6 +12,6 @@ outputs:
     description: "The complete result from the pulumi-actions command being run"
 runs:
   using: 'docker'
-  image: 'docker://mikefarah/yq:4-githubaction'
+  image: 'docker://ghcr.io/lowkey-who/pulumi-actions:90e36ceb3afbbcf90f5ad9d5f3fcc1713ebea99e-github-action'
   args:
     - ${{ inputs.cmd }}
