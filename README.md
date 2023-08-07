@@ -83,8 +83,8 @@ Options:
         - name: Configure AWS Credentials
           uses: aws-actions/configure-aws-credentials@v2
           with:
-              role-to-assume: <role-arn>
-              aws-region: <your-aws-region>
+            role-to-assume: <role-arn>
+            aws-region: <your-aws-region>
 
         - name: Run Pulumi actions 
           uses: lowkey-who/pulumi-actions@main
