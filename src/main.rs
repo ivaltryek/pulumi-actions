@@ -27,7 +27,7 @@ fn main() {
     // Check if arguments are correct
     args.notify_user_if_empty();
 
-    // if --install-mod arg is set; intall the dependencies.
+    // if --install-deps arg is set; intall the dependencies.
     if args.install_deps {
         args.init_pkgs();
     }

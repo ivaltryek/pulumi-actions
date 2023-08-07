@@ -37,7 +37,7 @@ pub struct Args {
     pub preview: bool,
 
     #[arg(long = "apply", default_value_t = false)]
-    /// preview the stack
+    /// apply the stack
     pub apply: bool,
 
     #[arg(long = "init", default_value_t = false)]
@@ -88,26 +88,21 @@ impl Args {
     pub fn notify_user_if_empty(&self) {
         match &self.backend {
             &Backend::Pulumicloud => {
-                if !self.pulumi_cloud_token.is_some() {
-                    panic!("Pulumi cloud token is required for backend type `pulumicloud`");
-                } else {
-                    self.set_token_as_env_var()
+                // set `pulumi_cloud_token` if it is set and `backend` is set to pulumicloud
+                let token_key = String::from("PULUMI_ACCESS_TOKEN");
+                match &self.pulumi_cloud_token {
+                    Some(value) => set_env_var(&token_key, &value),
+                    _ => panic!("pulumi cloud token is required for backend type `pulumicloud`"),
                 }
             }
             &Backend::S3 => {
-                if !self.s3_bucket_name.is_some() {
-                    panic!("S3 bucket name is required for backend type `s3`");
+                // Set s3 bucket url as an environment variable: PULUMI_BACKEND_URL
+                let s3_bucket_key = String::from("PULUMI_BACKEND_URL");
+                match &self.s3_bucket_name {
+                    Some(value) => set_env_var(&s3_bucket_key, &value),
+                    _ => panic!("s3 bucket name is required for backend type `s3`"),
                 }
             }
-        }
-    }
-
-    // set `pulumi_cloud_token` if it is set and `backend` is set to pulumicloud
-    fn set_token_as_env_var(&self) {
-        let token_key = String::from("PULUMI_ACCESS_TOKEN");
-        match &self.pulumi_cloud_token {
-            Some(value) => set_env_var(&token_key, &value),
-            _ => {}
         }
     }
 
