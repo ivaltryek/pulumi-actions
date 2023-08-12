@@ -94,11 +94,28 @@ Options:
             cmd: ${{ github.event.comment.body }}
 
     ```
-  After setting up this workflow, make a PR on your repo and pass the somewhat similar command to work with s3 backend and AWS Cloud.
+    After setting up this workflow, make a PR on your repo and pass the somewhat similar command to work with s3 backend and AWS Cloud.
 
-  ```
-  pulumi-actions -s ci-test --init --backend s3 --s3-bucket "s3://my-bucket-name" --runtime typescript --path "$GITHUB_WORKSPACE/examples/" --passphrase "$passphrase"
-  ```
+    ```
+    pulumi-actions -s ci-test --init --backend s3 --s3-bucket "s3://my-bucket-name" --runtime typescript --path "$GITHUB_WORKSPACE/examples/" --passphrase "$passphrase"
+    ```
+- Send output of action to the Pull request, so that you don't need to go to action and see the logs.
+    ```yaml
+    - name: Run Pulumi actions 
+      id: pulumi_actions
+      uses: lowkey-who/pulumi-actions@main
+      env:
+        passphrase: ${{ secrets.Passphrase }}
+      with:
+        cmd: ${{ github.event.comment.body }}
+
+    - name: Echo the output in PR from previous step
+      uses: mshick/add-pr-comment@v2
+      with:
+        message: | 
+          ```${{join(steps.pulumi_actions.outputs.*, '\n')}}
+    
+    ```
   
   To work with `aws-actions/configure-aws-credentials@v2` github action, you'll have to configure OIDC setup with AWS. Here is the [doc](https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-amazon-web-services) for that.
 
